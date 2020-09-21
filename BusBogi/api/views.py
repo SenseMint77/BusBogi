@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
 from .models import Bus_Station, Bus, Selected_List
 from .serializers import BusSerializer, BusStationSerializer, SelectedListSerializer
 from rest_framework import status
+import api.BusDetection as thread
+
 
 class BusStationView(APIView):
 
@@ -30,7 +31,14 @@ class BusStationView(APIView):
 
 class SelectView(APIView):
     def post(self, request):
-        selected_serializer = SelectedListSerializer(data=request.data)  # Request의 data를 UserSerializer로 변환
+        selected_serializer = SelectedListSerializer(data=request.data)
+        print(request.data)
+
+        bus_list = 273
+
+        test = thread.Detection(bus_list)
+
+        test.start()
 
         if selected_serializer.is_valid():
             selected_serializer.save()
